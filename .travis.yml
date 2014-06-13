@@ -11,3 +11,4 @@ before_install:
 script:
   - julia -e 'Pkg.init(); run(`ln -s $(pwd()) $(Pkg.dir("Fuzzy"))`); Pkg.pin("Fuzzy"); Pkg.resolve()'
   - julia -e 'using Fuzzy; @assert isdefined(:Fuzzy); @assert typeof(Fuzzy) === Module'
+  - julia ./test/runtests.jl
