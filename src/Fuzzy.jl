@@ -1,5 +1,6 @@
 module Fuzzy
 
-# package code goes here
+	# Module for membership functions
+	include("MF.jl")
 
-end # module
+end # module Fuzzy
