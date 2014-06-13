@@ -70,7 +70,7 @@ function eval_mf(mf, x)
 		return e ^ ( - 0.5 * ((x - mf.center) / mf.sigma) ^ 2)
 		
 	elseif typeof(mf) == BellMF
-		return  1 / (1 + ((x - mf.c) / a) ^ (2 * mf.b))
+		return  1 / (1 + ((x - mf.c) / mf.a) ^ (2 * mf.b))
 	
 	elseif typeof(mf) == TrapezoidalMF
 		return max(min(((x - mf.l_bottom_vertex) / (mf.l_top_vertex - mf.l_bottom_vertex)), 1, ((mf.r_bottom_vertex - x) / (mf.r_bottom_vertex - mf.r_top_vertex))), 0)
