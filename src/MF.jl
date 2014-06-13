@@ -33,6 +33,14 @@ type GaussianMF
 	sigma
 end
 
+type BellMF
+	# Generalised Bell membership function
+	
+	a
+	b
+	c
+end
+
 ##########################################
 
 function eval_mf(mf, x)
@@ -44,6 +52,9 @@ function eval_mf(mf, x)
 	
 	elseif typeof(mf) == GaussianMF
 		return e ^ ( - 0.5 * ((x - mf.center) / mf.sigma) ^ 2)
+		
+	elseif typeof(mf) == BellMF
+		return  1 / (1 + ((x - mf.c) / a) ^ (2 * mf.b))
 	end
 	
 end
