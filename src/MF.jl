@@ -41,13 +41,29 @@ type BellMF
 	c
 end
 
+type TrapezoidalMF
+	# Trapezoidal membership function
+	
+	l_bottom_vertex
+	l_top_vertex
+	r_top_vertex
+	r_bottom_vertex
+	
+	function TrapezoidalMF(l_bottom_vertex, l_top_vertex, r_top_vertex, r_bottom_vertex)
+		if l_bottom_vertex <= l_top_vertex <= r_top_vertex <= r_bottom_vertex
+			new(l_bottom_vertex, l_top_vertex, r_top_vertex, r_bottom_vertex)
+		else
+			error("invalid vertices")
+		end
+	end
+end
+
 ##########################################
 
 function eval_mf(mf, x)
 	# Evaluates the value of mf at x
 	
 	if typeof(mf) == TriangularMF
-		
 		return max(min(((x - mf.l_vertex) / (mf.center - mf.l_vertex)), ((mf.r_vertex - x) / (mf.r_vertex - mf.center))), 0)
 	
 	elseif typeof(mf) == GaussianMF
@@ -55,6 +71,9 @@ function eval_mf(mf, x)
 		
 	elseif typeof(mf) == BellMF
 		return  1 / (1 + ((x - mf.c) / a) ^ (2 * mf.b))
+	
+	elseif typeof(mf) == TrapezoidalMF
+		return max(min(((x - mf.l_bottom_vertex) / (mf.l_top_vertex - mf.l_bottom_vertex)), 1, ((mf.r_bottom_vertex - x) / (mf.r_bottom_vertex - mf.r_top_vertex))), 0)
 	end
 	
 end
