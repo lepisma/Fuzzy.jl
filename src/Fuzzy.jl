@@ -1,6 +1,6 @@
 module Fuzzy
 
-	# Module for membership functions
+	# Membership functions
 	include("MF.jl")
 	
 	# FIS
