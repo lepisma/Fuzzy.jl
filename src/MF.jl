@@ -1,15 +1,15 @@
-module MF
-
-#-----------------------------------------
-# Module defining the membership functions
-#-----------------------------------------
-
-export TriangularMF, GaussianMF, BellMF, TrapezoidalMF
-
-#-----------------------------------------
+# Contains various membership function types
+# ------------------------------------------
 
 type TriangularMF
 	# Triangular membership function type
+	#	
+	# Properties
+	# ----------
+	# `l_vertex`, `center` and `r_vertex` are the vertices of the triangle, in order
+	#
+	#	`eval` function returns membership value at a point
+	# `mean_at` function returns mean value at line clipped by given firing strength
 	
 	l_vertex
 	center
@@ -19,30 +19,51 @@ type TriangularMF
 	mean_at::Function
 
 	function TriangularMF(l_vertex, center, r_vertex)
+	
 		if l_vertex <= center <= r_vertex
 		
-			function eval(x)
-				maximum([minimum([((x - l_vertex) / (center - l_vertex)), ((r_vertex - x) / (r_vertex - center))]), 0])
+			this = new()
+			
+			this.l_vertex = l_vertex
+			this.center = center
+			this.r_vertex = r_vertex
+			
+			this.eval = function eval(x)
+			
+				maximum([minimum([((x - this.l_vertex) / (this.center - this.l_vertex)), ((this.r_vertex - x) / (this.r_vertex - this.center))]), 0])
+				
 			end
 			
-			function mean_at(firing_strength)
-				p1 = (center - l_vertex) * firing_strength + l_vertex
-				p2 = (center - r_vertex) * firing_strength + r_vertex
+			this.mean_at = function mean_at(firing_strength)
+			
+				p1 = (this.center - this.l_vertex) * firing_strength + this.l_vertex
+				p2 = (this.center - this.r_vertex) * firing_strength + this.r_vertex
 				(p1 + p2) / 2
+				
 			end
 			
-			new(l_vertex, center, r_vertex, eval, mean_at)
+			this
+			
 		else
+		
 			error("invalid vertices")
+			
 		end
+		
 	end
 	
 end
 
-#-----------------------------------------
-
 type GaussianMF
-	# Gaussian membership function
+	# Gaussian membership function type
+	#	
+	# Properties
+	# ----------
+	# `center` is the center of the distribution
+	# `sigma` determines width of the distribution
+	#
+	#	`eval` function returns membership value at a point
+	# `mean_at` function returns mean value at line clipped by given firing strength
 	
 	center
 	sigma
@@ -52,24 +73,40 @@ type GaussianMF
 	
 	function GaussianMF(center, sigma)
 	
-		function eval(x)
-			e ^ ( - 0.5 * ((x - center) / sigma) ^ 2)
-		end
+		this = new()
 		
-		function mean_at(firing_strength)
-			p1 = center + sigma * sqrt(-2 * log(firing_strength))
-			p2 = 2 * center - p1
+		this.center = center
+		this.sigma = sigma
+		
+		this.eval = function eval(x)
+		
+			e ^ ( - 0.5 * ((x - this.center) / this.sigma) ^ 2)
+			
+		end
+	
+		this.mean_at = function mean_at(firing_strength)
+		
+			p1 = this.center + this.sigma * sqrt(-2 * log(firing_strength))
+			p2 = 2 * this.center - p1
 			(p1 + p2) / 2
+			
 		end
 		
-		new(center, sigma, eval, mean_at)
+		this
+		
 	end
+	
 end
 
-#-----------------------------------------
-
 type BellMF
-	# Generalised Bell membership function
+	# Generalised Bell membership function type
+	#	
+	# Properties
+	# ----------
+	# `a`, `b` and `c` the usual bell parameters with `c` being the center
+	#
+	#	`eval` function returns membership value at a point
+	# `mean_at` function returns mean value at line clipped by given firing strength
 	
 	a
 	b
@@ -79,25 +116,42 @@ type BellMF
 	mean_at::Function
 	
 	function BellMF(a, b, c)
-	
-		function eval(x)
-			1 / (1 + abs((x - c) / a) ^ (2 * b))
+		
+		this = new()
+		
+		this.a = a
+		this.b = b
+		this.c = c
+		
+		this.eval = function eval(x)
+		
+			1 / (1 + abs((x - this.c) / this.a) ^ (2 * this.b))
+			
 		end
 		
-		function mean_at(firing_strength)
-			p1 = center + a * (((1 / firing_strength) - 1) ^ (-2 * b))
-			p2 = 2 * center - p1
+		this.mean_at = function mean_at(firing_strength)
+		
+			p1 = this.c + this.a * (((1 / firing_strength) - 1) ^ (-2 * this.b))
+			p2 = 2 * this.c - p1
 			(p1 + p2) / 2
+			
 		end
 		
-		new(a, b, c, eval, mean_at)
+		this
+		
 	end
+	
 end
 
-#-----------------------------------------
-
 type TrapezoidalMF
-	# Trapezoidal membership function
+	# Trapezoidal membership function type
+	#	
+	# Properties
+	# ----------
+	# `l_bottom_vertex`, `l_top_vertex`, `r_top_vertex` and `r_bottom_vertex` are the vertices of the trapezoid, in order
+	#
+	#	`eval` function returns membership value at a point
+	# `mean_at` function returns mean value at line clipped by given firing strength
 	
 	l_bottom_vertex
 	l_top_vertex
@@ -108,23 +162,38 @@ type TrapezoidalMF
 	mean_at::Function
 	
 	function TrapezoidalMF(l_bottom_vertex, l_top_vertex, r_top_vertex, r_bottom_vertex)
+	
 		if l_bottom_vertex <= l_top_vertex <= r_top_vertex <= r_bottom_vertex
 		
-			function eval(x)
-				maximum([minimum([((x - l_bottom_vertex) / (l_top_vertex - l_bottom_vertex)), 1, ((r_bottom_vertex - x) / (r_bottom_vertex - r_top_vertex))]), 0])
+			this = new()
+			
+			this.l_bottom_vertex = l_bottom_vertex
+			this.l_top_vertex = l_top_vertex
+			this.r_top_vertex = r_top_vertex
+			this.r_bottom_vertex = r_bottom_vertex
+		
+			this.eval = function eval(x)
+			
+				maximum([minimum([((x - this.l_bottom_vertex) / (this.l_top_vertex - this.l_bottom_vertex)), 1, ((this.r_bottom_vertex - x) / (this.r_bottom_vertex - this.r_top_vertex))]), 0])
+				
 			end
 			
-			function mean_at(firing_strength)
-				p1 = (l_top_vertex - l_bottom_vertex) * firing_strength + l_bottom_vertex
-				p2 = (r_top_vertex - r_bottom_vertex) * firing_strength + r_bottom_vertex
+			this.mean_at = function mean_at(firing_strength)
+			
+				p1 = (this.l_top_vertex - this.l_bottom_vertex) * firing_strength + this.l_bottom_vertex
+				p2 = (this.r_top_vertex - this.r_bottom_vertex) * firing_strength + this.r_bottom_vertex
 				(p1 + p2) / 2
+				
 			end
 			
-			new(l_bottom_vertex, l_top_vertex, r_top_vertex, r_bottom_vertex, eval, mean_at)
+			this
+			
 		else
+		
 			error("invalid vertices")
+			
 		end
+		
 	end
-end
-
+	
 end

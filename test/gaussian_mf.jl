@@ -1,9 +1,7 @@
-import Fuzzy
-
 center = 5
 sigma = 2
 
-mf = Fuzzy.MF.GaussianMF(center, sigma)
+mf = GaussianMF(center, sigma)
 
 @assert mf.eval(center + sigma) == e ^ (-0.5)
 @assert mf.eval(center) == 1
