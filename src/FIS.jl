@@ -3,11 +3,11 @@ type FISMamdani
 	input_mfs::Array{Dict{Any, Any}, 1}
 	output_mfs::Dict{Any, Any}
 	
-	evalFIS::Function
+	eval_FIS::Function
 	
 	function FISMamdani(input_mfs, output_mfs)
 	
-		function evalFIS(input_values, rules; firing_method = "MIN", defuzz_method = "COM")
+		function eval_FIS(input_values, rules; firing_method = "MIN", defuzz_method = "COM")
 		
 			firing_strengths = Float32[]
 			for rule in rules
