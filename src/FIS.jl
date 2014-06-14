@@ -7,7 +7,7 @@ type FISMamdani
 	
 	function FISMamdani(input_mfs, output_mfs)
 	
-		function eval_FIS(input_values, rules; firing_method = "MIN", defuzz_method = "COM")
+		function eval_FIS(input_values, rules; firing_method = "MIN", defuzz_method = "MOM")
 		
 			firing_strengths = Float32[]
 			for rule in rules
@@ -32,7 +32,7 @@ type FISMamdani
 
 end
 
-function defuzz(firing_strengths, output_mfs; defuzz_method = "COM")
+function defuzz(firing_strengths, output_mfs; defuzz_method = "MOM")
 	####
 	return 42
 end
