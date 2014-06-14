@@ -6,5 +6,5 @@ c = 5
 
 mf = Fuzzy.MF.BellMF(a, b, c)
 
-@assert Fuzzy.MF.eval_mf(mf, c) == 1
-@assert Fuzzy.MF.eval_mf(mf, c - a) == Fuzzy.MF.eval_mf(mf, c + a) == 0.5
+@assert mf.eval(c) == 1
+@assert mf.eval(c - a) == mf.eval(c + a) == 0.5

@@ -4,8 +4,7 @@ module MF
 # Module defining the membership functions
 ##########################################
 
-export TriangularMF, GaussianMF
-export eval_mf
+export TriangularMF, GaussianMF, BellMF, TrapezoidalMF
 
 ##########################################
 
@@ -15,10 +14,17 @@ type TriangularMF
 	l_vertex
 	center
 	r_vertex
-	
+
+	eval::Function
+
 	function TriangularMF(l_vertex, center, r_vertex)
 		if l_vertex <= center <= r_vertex
-			new(l_vertex, center, r_vertex)
+		
+			function eval(x)
+				max(min(((x - l_vertex) / (center - l_vertex)), ((r_vertex - x) / (r_vertex - center))), 0)
+			end
+			
+			new(l_vertex, center, r_vertex, eval)
 		else
 			error("invalid vertices")
 		end
@@ -31,6 +37,17 @@ type GaussianMF
 	
 	center
 	sigma
+	
+	eval::Function
+	
+	function GaussianMF(center, sigma)
+	
+		function eval(x)
+			e ^ ( - 0.5 * ((x - center) / sigma) ^ 2)
+		end
+		
+		new(center, sigma, eval)
+	end
 end
 
 type BellMF
@@ -39,6 +56,17 @@ type BellMF
 	a
 	b
 	c
+	
+	eval::Function
+	
+	function BellMF(a, b, c)
+	
+		function eval(x)
+			1 / (1 + ((x - c) / a) ^ (2 * b))
+		end
+		
+		new(a, b, c, eval)
+	end
 end
 
 type TrapezoidalMF
@@ -49,33 +77,20 @@ type TrapezoidalMF
 	r_top_vertex
 	r_bottom_vertex
 	
+	eval::Function
+	
 	function TrapezoidalMF(l_bottom_vertex, l_top_vertex, r_top_vertex, r_bottom_vertex)
 		if l_bottom_vertex <= l_top_vertex <= r_top_vertex <= r_bottom_vertex
-			new(l_bottom_vertex, l_top_vertex, r_top_vertex, r_bottom_vertex)
+		
+			function eval(x)
+				max(min(((x - l_bottom_vertex) / (l_top_vertex - l_bottom_vertex)), 1, ((r_bottom_vertex - x) / (r_bottom_vertex - r_top_vertex))), 0)
+			end
+			
+			new(l_bottom_vertex, l_top_vertex, r_top_vertex, r_bottom_vertex, eval)
 		else
 			error("invalid vertices")
 		end
 	end
-end
-
-##########################################
-
-function eval_mf(mf, x)
-	# Evaluates the value of mf at x
-	
-	if typeof(mf) == TriangularMF
-		return max(min(((x - mf.l_vertex) / (mf.center - mf.l_vertex)), ((mf.r_vertex - x) / (mf.r_vertex - mf.center))), 0)
-	
-	elseif typeof(mf) == GaussianMF
-		return e ^ ( - 0.5 * ((x - mf.center) / mf.sigma) ^ 2)
-		
-	elseif typeof(mf) == BellMF
-		return  1 / (1 + ((x - mf.c) / mf.a) ^ (2 * mf.b))
-	
-	elseif typeof(mf) == TrapezoidalMF
-		return max(min(((x - mf.l_bottom_vertex) / (mf.l_top_vertex - mf.l_bottom_vertex)), 1, ((mf.r_bottom_vertex - x) / (mf.r_bottom_vertex - mf.r_top_vertex))), 0)
-	end
-	
 end
 
 end
