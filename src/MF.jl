@@ -21,7 +21,7 @@ type TriangularMF
 		if l_vertex <= center <= r_vertex
 		
 			function eval(x)
-				maximum(minimum(((x - l_vertex) / (center - l_vertex)), ((r_vertex - x) / (r_vertex - center))), 0)
+				maximum([minimum([((x - l_vertex) / (center - l_vertex)), ((r_vertex - x) / (r_vertex - center))]), 0])
 			end
 			
 			new(l_vertex, center, r_vertex, eval)
@@ -83,7 +83,7 @@ type TrapezoidalMF
 		if l_bottom_vertex <= l_top_vertex <= r_top_vertex <= r_bottom_vertex
 		
 			function eval(x)
-				maximum(minimum(((x - l_bottom_vertex) / (l_top_vertex - l_bottom_vertex)), 1, ((r_bottom_vertex - x) / (r_bottom_vertex - r_top_vertex))), 0)
+				maximum([minimum([((x - l_bottom_vertex) / (l_top_vertex - l_bottom_vertex)), 1, ((r_bottom_vertex - x) / (r_bottom_vertex - r_top_vertex))]), 0])
 			end
 			
 			new(l_bottom_vertex, l_top_vertex, r_top_vertex, r_bottom_vertex, eval)
