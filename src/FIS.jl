@@ -61,7 +61,7 @@ type FISMamdani
 			
 			end
 			
-			defuzz(firing_strengths, values(this.output_mfs), defuzz_method = defuzz_method)
+			defuzz(firing_strengths, collect(values(this.output_mfs)), defuzz_method = defuzz_method)
 		
 		end
 		
