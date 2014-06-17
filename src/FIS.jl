@@ -16,30 +16,31 @@ type FISMamdani
 	
 	input_mfs::Array{Dict{Any, Any}, 1}
 	output_mfs::Dict{Any, Any}
+	rules::Array{Rule, 1}
 	
 	eval_FIS::Function
 	
-	function FISMamdani(input_mfs, output_mfs)
+	function FISMamdani(input_mfs, output_mfs, rules)
 	
 		this = new()
 		
 		this.input_mfs = input_mfs
 		this.output_mfs = output_mfs
+		this.rules = rules
 		
-		this.eval_FIS = function eval_FIS(input_values, rules; firing_method = "MIN", defuzz_method = "MOM")
+		this.eval_FIS = function eval_FIS(input_values; firing_method = "MIN", defuzz_method = "MOM")
 			# Evaluates the FIS
 			#
 			# Parameters
 			# ----------
 			# `input_values` is an Array of inputs
-			# `rules` is an Array of Rules
 			# `firing_method` is the method for finding firing strength
 			#									Currently supports "MIN" (minimum) and "PROD" (product)
 			# `defuzz_method` is the method for defuzzification, see defuzz function definition
 		
 			firing_strengths = Float32[]
 			
-			for rule in rules
+			for rule in this.rules
 				
 				tmp_strengths = Float32[]
 				
