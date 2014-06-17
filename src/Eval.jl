@@ -39,12 +39,13 @@ function eval_FIS(fis::FISMamdani,
 	
 	end
 	
-	defuzz(firing_strengths, collect(values(fis.output_mfs_dict)), defuzz_method = defuzz_method)
+	defuzz(firing_strengths, fis.rules, fis.output_mfs_dict, defuzz_method = defuzz_method)
 
 end
 
 function defuzz(firing_strengths::Vector{Float64},
-				output_mfs;
+				rules::Vector{Rule},
+				output_mfs_dict::Dict{Any, Any};
 				defuzz_method = "MOM")
 	# Defuzzifies the output using the given firing strengths
 	#
@@ -52,14 +53,16 @@ function defuzz(firing_strengths::Vector{Float64},
 	# ----------
 	# `firing_strengths` is a Vector of firing strengths
 	# 		one for each output membership function
-	# `output_mfs` is a Vector of output membership functions
+	# `rules` is a Vector of Rule
+	# `output_mfs_dict` is a Dict of output membership functions
 	# `defuzz_method` is the method for defuzzification
 	# 		Currently supports "MOM" (Mean of Maximum)
 	
 	if defuzz_method == "MOM"
 		
 		max_firing_index = indmax(firing_strengths)
-		output_mfs[max_firing_index].mean_at(maximum(firing_strengths))
+		max_fired_mf_name = rules[max_firing_index].output_mf_name
+		output_mfs_dict[max_fired_mf_name].mean_at(maximum(firing_strengths))
 		
 	end
 
