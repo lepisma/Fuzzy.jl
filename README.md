@@ -6,36 +6,36 @@ Fuzzy Inference System in julia
 
 ###Install
 
-`Pkg.clone("git://github.com/lepisma/Fuzzy.jl.git")`
+`julia> Pkg.clone("git://github.com/lepisma/Fuzzy.jl.git")`
 
 ###QuickStart
 
-`using Fuzzy`
+`julia> using Fuzzy`
 
 -	Create input, output membership functions and rules
 
 ```
-input_a = {"small" => Fuzzy.TriangularMF(1, 2, 3), "large" => Fuzzy.TriangularMF(4, 5, 6)}
-input_b = {"small" => Fuzzy.TriangularMF(1, 2, 3)}
+julia> input_a = {"small" => Fuzzy.TriangularMF(1, 2, 3), "large" => Fuzzy.TriangularMF(4, 5, 6)}
+julia> input_b = {"small" => Fuzzy.TriangularMF(1, 2, 3)}
 
-inputs = [input_a, input_b]
-output = {"small" => TriangularMF(1, 2, 3)}
+julia> inputs = [input_a, input_b]
+julia> output = {"small" => TriangularMF(1, 2, 3)}
 
-rule = Rule(["large", "small"], "small")
-rules = [rule]
+julia> rule = Rule(["large", "small"], "small")
+julia> rules = [rule]
 ```
     
 -	Create FIS
 
 ```
-fis = FISMamdani(inputs, output, rules)
+julia> fis = FISMamdani(inputs, output, rules)
 ```
 
 -	Find output
 
 ```
-in_vals = [4.7, 2.3]
-eval_FIS(fis, in_vals)
+julia> in_vals = [4.7, 2.3]
+julia> eval_FIS(fis, in_vals)
 ```
 
 ###Features
