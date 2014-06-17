@@ -19,24 +19,23 @@ input_a = {"small" => Fuzzy.TriangularMF(1, 2, 3), "large" => Fuzzy.TriangularMF
 input_b = {"small" => Fuzzy.TriangularMF(1, 2, 3)}
 
 inputs = [input_a, input_b]
-output = {"small" => Fuzzy.TriangularMF(1, 2, 3)}
+output = {"small" => TriangularMF(1, 2, 3)}
 
-rule = Fuzzy.Rule(["large", "small"], "small")
+rule = Rule(["large", "small"], "small")
 rules = [rule]
 ```
-    
     
 -	Create FIS
 
 ```
-fis = Fuzzy.FISMamdani(inputs, output, rules)
+fis = FISMamdani(inputs, output, rules)
 ```
 
 -	Find output
 
 ```
 in_vals = [4.7, 2.3]
-fis.eval_FIS(in_vals)
+eval_FIS(fis, in_vals)
 ```
 
 ###Features
