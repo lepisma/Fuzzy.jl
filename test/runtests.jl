@@ -5,10 +5,10 @@
 using Fuzzy
 
 tests = ["triangular_mf.jl",
-				"gaussian_mf.jl",
-				"trapezoidal_mf.jl",
-				"bell_mf.jl",
-				"simple_fis.jl"]
+		"gaussian_mf.jl",
+		"trapezoidal_mf.jl",
+		"bell_mf.jl",
+		"simple_fis.jl"]
 				
 println("Running test:")
 

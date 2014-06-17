@@ -1,26 +1,29 @@
 # Contains evaluation functions
 # ----------------------------------
 
-function eval_FIS(fis, input_values; firing_method = "MIN", defuzz_method = "MOM")
+function eval_FIS(fis::FISMamdani,
+					input_values::Vector{Float64};
+					firing_method = "MIN",
+					defuzz_method = "MOM")
 	# Evaluates the FIS
 	#
 	# Parameters
 	# ----------
 	# `fis` is the inference system to evaluate
-	# `input_values` is an Array of inputs
+	# `input_values` is a Vector of inputs
 	# `firing_method` is the method for finding firing strength
-	#									Currently supports "MIN" (minimum) and "PROD" (product)
+	# 		Currently supports "MIN" (minimum) and "PROD" (product)
 	# `defuzz_method` is the method for defuzzification, see defuzz function definition
 
-	firing_strengths = Float32[]
+	firing_strengths = Float64[]
 	
 	for rule in fis.rules
 		
-		tmp_strengths = Float32[]
+		tmp_strengths = Float64[]
 		
 		for i in length(rule.input_mf_names)
 			
-			push!(tmp_strengths, fis.input_mfs[i][rule.input_mf_names[i]].eval(input_values[i]))
+			push!(tmp_strengths, fis.input_mfs_dicts[i][rule.input_mf_names[i]].eval(input_values[i]))
 		
 		end
 		
@@ -36,20 +39,22 @@ function eval_FIS(fis, input_values; firing_method = "MIN", defuzz_method = "MOM
 	
 	end
 	
-	defuzz(firing_strengths, collect(values(fis.output_mfs)), defuzz_method = defuzz_method)
+	defuzz(firing_strengths, collect(values(fis.output_mfs_dict)), defuzz_method = defuzz_method)
 
 end
 
-function defuzz(firing_strengths, output_mfs; defuzz_method = "MOM")
+function defuzz(firing_strengths::Vector{Float64},
+				output_mfs;
+				defuzz_method = "MOM")
 	# Defuzzifies the output using the given firing strengths
 	#
 	# Parameters
 	# ----------
-	# `firing_strengths` is an Array of firing strengths
-	#											one for each output membership function
-	# `output_mfs` is an Array of output membership functions
+	# `firing_strengths` is a Vector of firing strengths
+	# 		one for each output membership function
+	# `output_mfs` is a Vector of output membership functions
 	# `defuzz_method` is the method for defuzzification
-	#									Currently supports "MOM" (Mean of Maximum)
+	# 		Currently supports "MOM" (Mean of Maximum)
 	
 	if defuzz_method == "MOM"
 		

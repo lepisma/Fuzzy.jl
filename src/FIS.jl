@@ -1,15 +1,15 @@
-#	Contains FIS and Rule types
+# Contains FIS and Rule types
 # ---------------------------
 
 type Rule
 	# A Rule connecting input and output membership function
-	#	
+	#
 	# Properties
 	# ----------
-	# `input_mf_names` is an Array of ASCIIString (one for each input) which contains name of membership functions
+	# `input_mf_names` is a Vector of ASCIIString (in order of inputs) which contains name of membership functions
 	# `output_mf_name` is an ASCIIString containing the connected output membership function name with `input_mf_names`
 	
-	input_mf_names::Array{ASCIIString, 1}
+	input_mf_names::Vector{ASCIIString}
 	output_mf_name::ASCIIString
 
 end
@@ -19,16 +19,15 @@ type FISMamdani
 	#	
 	# Properties
 	# ----------
-	# `input_mfs` is an Array of Dict (one for each input) which contains membership function
-	#							associated with its name
-	#							as "small" => TriangularMF(1, 2, 3)
-	# `output_mfs` is a Dict containing membership function of output associated with names
-	#							as "small" => GaussianMF(4, 2)
-	#
-	#	`eval_FIS` function finds the output given inputs and rules
+	# `input_mfs_dicts` is a Vector of Dict (one for each input) which contains membership function
+	# 		associated with its name
+	# 		e.g. "small" => TriangularMF(1, 2, 3)
+	# `output_mfs_dict` is a Dict containing membership function of output associated with names
+	# 		e.g. "small" => GaussianMF(4, 2)
+	# `rules` is a Vector of Rule that form the inference system
 	
-	input_mfs::Array{Dict{Any, Any}, 1}
-	output_mfs::Dict{Any, Any}
-	rules::Array{Rule, 1}
+	input_mfs_dicts::Vector{Dict{Any, Any}}
+	output_mfs_dict::Dict{Any, Any}
+	rules::Vector{Rule}
 
 end

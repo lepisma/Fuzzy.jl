@@ -8,7 +8,7 @@ type TriangularMF
 	# ----------
 	# `l_vertex`, `center` and `r_vertex` are the vertices of the triangle, in order
 	#
-	#	`eval` function returns membership value at a point
+	# `eval` function returns membership value at a point
 	# `mean_at` function returns mean value at line clipped by given firing strength
 	
 	l_vertex
@@ -62,7 +62,7 @@ type GaussianMF
 	# `center` is the center of the distribution
 	# `sigma` determines width of the distribution
 	#
-	#	`eval` function returns membership value at a point
+	# `eval` function returns membership value at a point
 	# `mean_at` function returns mean value at line clipped by given firing strength
 	
 	center
@@ -105,7 +105,7 @@ type BellMF
 	# ----------
 	# `a`, `b` and `c` the usual bell parameters with `c` being the center
 	#
-	#	`eval` function returns membership value at a point
+	# `eval` function returns membership value at a point
 	# `mean_at` function returns mean value at line clipped by given firing strength
 	
 	a
@@ -150,7 +150,7 @@ type TrapezoidalMF
 	# ----------
 	# `l_bottom_vertex`, `l_top_vertex`, `r_top_vertex` and `r_bottom_vertex` are the vertices of the trapezoid, in order
 	#
-	#	`eval` function returns membership value at a point
+	# `eval` function returns membership value at a point
 	# `mean_at` function returns mean value at line clipped by given firing strength
 	
 	l_bottom_vertex

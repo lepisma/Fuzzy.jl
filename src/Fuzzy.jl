@@ -1,15 +1,10 @@
 module Fuzzy
 	
-	export TriangularMF,
-					GaussianMF,
-					BellMF,
-					TrapezoidalMF,
-					
-					Rule,
-					FISMamdani,
-					
-					eval_FIS,
-					defuzz
+	export TriangularMF, GaussianMF, BellMF, TrapezoidalMF
+	
+	export Rule, FISMamdani
+	
+	export eval_FIS
 	
 	# Membership functions
 	include("MF.jl")
@@ -20,4 +15,4 @@ module Fuzzy
 	# Evaluation functions
 	include("Eval.jl")
 
-end # module Fuzzy
+end
