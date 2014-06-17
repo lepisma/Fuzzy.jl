@@ -197,3 +197,50 @@ type TrapezoidalMF
 	end
 	
 end
+
+type SigmoidMF
+	# Sigmoid membership function type
+	#	
+	# Properties
+	# ----------
+	# `a` controls slope
+	# `c` is the crossover point
+	# `limit` sets the extreme limit
+	#
+	# `eval` function returns membership value at a point
+	# `mean_at` function returns mean value at line clipped by given firing strength
+	
+	a
+	c
+	limit
+	
+	eval::Function
+	mean_at::Function
+	
+	function SigmoidMF(a, c, limit)
+	
+		this = new()
+		
+		this.a = a
+		this.c = c
+		this.limit = limit
+	
+		this.eval = function eval(x)
+		
+			1 / (1 + exp(-this.a * (x - this.c)))
+			
+		end
+		
+		this.mean_at = function mean_at(firing_strength)
+		
+			p1 = -log((1 / firing_strength) - 1) / this.a + this.c
+			p2 = this.limit
+			(p1 + p2) / 2
+			
+		end
+		
+		this
+		
+	end
+	
+end

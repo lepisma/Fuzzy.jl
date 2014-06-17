@@ -1,6 +1,6 @@
 module Fuzzy
 	
-	export TriangularMF, GaussianMF, BellMF, TrapezoidalMF
+	export TriangularMF, GaussianMF, BellMF, TrapezoidalMF, SigmoidMF
 	
 	export Rule, FISMamdani
 	

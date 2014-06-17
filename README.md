@@ -48,8 +48,7 @@ julia> eval_FIS(fis, in_vals)
     -	**Gaussian**
     -	**Bell**
     -	**Trapezoidal**
-    -	*Sigmoid (coming soon)*
-    -	*L-R*
+    -	**Sigmoid**
 -	Defuzzification
 	-	**Mean of Maximum**
     -	*Weighted Average (coming soon)*
