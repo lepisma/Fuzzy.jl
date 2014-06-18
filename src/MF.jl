@@ -323,7 +323,7 @@ type SigmoidMF
 				
 				elseif firing_strength == 0
 				
-					p_firing_strength = 0.001
+					return 0
 				
 				else
 					
