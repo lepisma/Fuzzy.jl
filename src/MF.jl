@@ -113,7 +113,7 @@ type GaussianMF
 			p1 = this.center + this.sigma * sqrt(-2 * log(firing_strength))
 			p2 = 2 * this.center - p1
 			
-			quadgk(this.eval, -Inf, p1) + (p2 - p1) * firing_strength + quadgk(this.eval, p2, Inf)
+			quadgk(this.eval, -Inf, p1)[1] + (p2 - p1) * firing_strength + quadgk(this.eval, p2, Inf)[1]
 		
 		end
 		
@@ -167,7 +167,7 @@ type BellMF
 			p1 = this.c + this.a * (((1 / firing_strength) - 1) ^ (-2 * this.b))
 			p2 = 2 * this.c - p1
 			
-			quadgk(this.eval, -Inf, p1) + (p2 - p1) * firing_strength + quadgk(this.eval, p2, Inf)
+			quadgk(this.eval, -Inf, p1)[1] + (p2 - p1) * firing_strength + quadgk(this.eval, p2, Inf)[1]
 		
 		end
 		
@@ -296,11 +296,11 @@ type SigmoidMF
 				
 				if this.a > 0
 					
-					return (p2 - p1) * firing_strength + quadgk(this.eval, -Inf, p1)
+					return (p2 - p1) * firing_strength + quadgk(this.eval, -Inf, p1)[1]
 					
 				elseif this.a < 0
 				
-					return (p1 - p2) * firing_strength + quadgk(this.eval, p1, Inf)
+					return (p1 - p2) * firing_strength + quadgk(this.eval, p1, Inf)[1]
 				
 				end
 			
