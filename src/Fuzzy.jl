@@ -4,7 +4,7 @@ module Fuzzy
 	
 	export Rule, FISMamdani
 	
-	export eval_FIS
+	export eval_fis
 	
 	# Membership functions
 	include("MF.jl")

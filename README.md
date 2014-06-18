@@ -35,7 +35,7 @@ julia> fis = FISMamdani(inputs, output, rules)
 
 ```
 julia> in_vals = [4.7, 2.3]
-julia> eval_FIS(fis, in_vals)
+julia> eval_fis(fis, in_vals)
 ```
 
 ###Features

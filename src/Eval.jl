@@ -1,7 +1,7 @@
 # Contains evaluation functions
 # ----------------------------------
 
-function eval_FIS(fis::FISMamdani,
+function eval_fis(fis::FISMamdani,
 					input_values::Vector{Float64};
 					firing_method = "MIN",
 					defuzz_method = "MOM")
@@ -61,7 +61,7 @@ function defuzz(firing_strengths::Vector{Float64},
 	if defuzz_method == "MOM"
 		
 		max_firing_index = indmax(firing_strengths)
-		max_fired_mf_name = rules[max_firing_index].output_mf_name
+		max_fired_mf_name = rules[max_firing_index].output_mf
 		output_mfs_dict[max_fired_mf_name].mean_at(maximum(firing_strengths))
 		
 	end

@@ -15,4 +15,4 @@ rules = [rule]
 
 fis = FISMamdani(ips, ops, rules)
 
-@assert eval_FIS(fis, ival) == 2.0
+@assert eval_fis(fis, ival) == 2.0
