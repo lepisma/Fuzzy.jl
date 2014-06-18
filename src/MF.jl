@@ -37,10 +37,18 @@ type TriangularMF
 			end
 			
 			this.mean_at = function mean_at(firing_strength)
-			
-				p1 = (this.center - this.l_vertex) * firing_strength + this.l_vertex
-				p2 = (this.center - this.r_vertex) * firing_strength + this.r_vertex
-				(p1 + p2) / 2
+				
+				if firing_strength != 1
+					
+					p1 = (this.center - this.l_vertex) * firing_strength + this.l_vertex
+					p2 = (this.center - this.r_vertex) * firing_strength + this.r_vertex
+					(p1 + p2) / 2
+				
+				elseif firing_strength == 1
+				
+					return this.center
+				
+				end
 				
 			end
 			
@@ -96,9 +104,7 @@ type GaussianMF
 	
 		this.mean_at = function mean_at(firing_strength)
 		
-			p1 = this.center + this.sigma * sqrt(-2 * log(firing_strength))
-			p2 = 2 * this.center - p1
-			(p1 + p2) / 2
+			this.center
 			
 		end
 		
@@ -152,9 +158,7 @@ type BellMF
 		
 		this.mean_at = function mean_at(firing_strength)
 		
-			p1 = this.c + this.a * (((1 / firing_strength) - 1) ^ (-2 * this.b))
-			p2 = 2 * this.c - p1
-			(p1 + p2) / 2
+			this.c
 			
 		end
 		
@@ -259,44 +263,57 @@ type SigmoidMF
 	
 	function SigmoidMF(a, c, limit)
 	
-		this = new()
+		if (a > 0 && limit > c) || (a < 0 && limit < c)
+
+			this = new()
 		
-		this.a = a
-		this.c = c
-		this.limit = limit
-	
-		this.eval = function eval(x)
+			this.a = a
+			this.c = c
+			this.limit = limit
 		
-			1 / (1 + exp(-this.a * (x - this.c)))
+			this.eval = function eval(x)
 			
-		end
-		
-		this.mean_at = function mean_at(firing_strength)
-		
-			p1 = -log((1 / firing_strength) - 1) / this.a + this.c
-			p2 = this.limit
-			(p1 + p2) / 2
-			
-		end
-		
-		this.area_under = function area_under(firing_strength)
-		
-			p1 = -log((1 / firing_strength) - 1) / this.a + this.c
-			p2 = this.limit
-			
-			if p2 < p1
+				1 / (1 + exp(-this.a * (x - this.c)))
 				
-				return (p1 - p2) * firing_strength + quadgk(this.eval, p1, Inf)
+			end
+			
+			this.mean_at = function mean_at(firing_strength)
 				
-			elseif p2 > p1
-			
-				return (p2 - p1) * firing_strength + quadgk(this.eval, -Inf, p1)
-			
+				p_firing_strength = firing_strength == 1 ? 0.999 : firing_strength
+					
+				p1 = -log((1 / p_firing_strength) - 1) / this.a + this.c
+				p2 = this.limit
+				(p1 + p2) / 2
+				
 			end
 		
+			this.area_under = function area_under(firing_strength)
+			
+				p_firing_strength = firing_strength == 1 ? 0.999 : firing_strength
+				
+				p1 = -log((1 / p_firing_strength) - 1) / this.a + this.c
+				p2 = this.limit
+				
+				if this.a > 0
+					
+					return (p2 - p1) * firing_strength + quadgk(this.eval, -Inf, p1)
+					
+				elseif this.a < 0
+				
+					return (p1 - p2) * firing_strength + quadgk(this.eval, p1, Inf)
+				
+				end
+			
+			end
+			
+			this
+		
+		else
+		
+			error("invalid parameters")
+			
 		end
 		
-		this
 		
 	end
 	
