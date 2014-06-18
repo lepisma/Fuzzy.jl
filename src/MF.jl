@@ -10,6 +10,7 @@ type TriangularMF
 	#
 	# `eval` function returns membership value at a point
 	# `mean_at` function returns mean value at line clipped by given firing strength
+	# `area_under` function returns area under curve clipped by given firing strength
 	
 	l_vertex
 	center
@@ -17,6 +18,7 @@ type TriangularMF
 
 	eval::Function
 	mean_at::Function
+	area_under::Function
 
 	function TriangularMF(l_vertex, center, r_vertex)
 	
@@ -42,6 +44,12 @@ type TriangularMF
 				
 			end
 			
+			this.area_under = function area_under(firing_strength)
+				
+				(this.r_vertex - this.l_vertex) * (2 - firing_strength) * firing_strength * 0.5
+				
+			end
+			
 			this
 			
 		else
@@ -64,12 +72,14 @@ type GaussianMF
 	#
 	# `eval` function returns membership value at a point
 	# `mean_at` function returns mean value at line clipped by given firing strength
+	# `area_under` function returns area under curve clipped by given firing strength
 	
 	center
 	sigma
 	
 	eval::Function
 	mean_at::Function
+	area_under::Function
 	
 	function GaussianMF(center, sigma)
 	
@@ -92,6 +102,15 @@ type GaussianMF
 			
 		end
 		
+		this.area_under = function area_under(firing_strength)
+		
+			p1 = this.center + this.sigma * sqrt(-2 * log(firing_strength))
+			p2 = 2 * this.center - p1
+			
+			quadgk(this.eval, -Inf, p1) + (p2 - p1) * firing_strength + quadgk(this.eval, p2, Inf)
+		
+		end
+		
 		this
 		
 	end
@@ -107,6 +126,7 @@ type BellMF
 	#
 	# `eval` function returns membership value at a point
 	# `mean_at` function returns mean value at line clipped by given firing strength
+	# `area_under` function returns area under curve clipped by given firing strength
 	
 	a
 	b
@@ -114,6 +134,7 @@ type BellMF
 	
 	eval::Function
 	mean_at::Function
+	area_under::Function
 	
 	function BellMF(a, b, c)
 		
@@ -137,6 +158,15 @@ type BellMF
 			
 		end
 		
+		this.area_under = function area_under(firing_strength)
+		
+			p1 = this.c + this.a * (((1 / firing_strength) - 1) ^ (-2 * this.b))
+			p2 = 2 * this.c - p1
+			
+			quadgk(this.eval, -Inf, p1) + (p2 - p1) * firing_strength + quadgk(this.eval, p2, Inf)
+		
+		end
+		
 		this
 		
 	end
@@ -152,6 +182,7 @@ type TrapezoidalMF
 	#
 	# `eval` function returns membership value at a point
 	# `mean_at` function returns mean value at line clipped by given firing strength
+	# `area_under` function returns area under curve clipped by given firing strength
 	
 	l_bottom_vertex
 	l_top_vertex
@@ -160,6 +191,7 @@ type TrapezoidalMF
 	
 	eval::Function
 	mean_at::Function
+	area_under::Function
 	
 	function TrapezoidalMF(l_bottom_vertex, l_top_vertex, r_top_vertex, r_bottom_vertex)
 	
@@ -186,6 +218,12 @@ type TrapezoidalMF
 				
 			end
 			
+			this.area_under = function area_under(firing_strength)
+			
+				(this.r_bottom_vertex + this.r_top_vertex - this.l_bottom_vertex - this.l_top_vertex) * firing_strength * 0.5
+			
+			end
+			
 			this
 			
 		else
@@ -209,6 +247,7 @@ type SigmoidMF
 	#
 	# `eval` function returns membership value at a point
 	# `mean_at` function returns mean value at line clipped by given firing strength
+	# `area_under` function returns area under curve clipped by given firing strength
 	
 	a
 	c
@@ -216,6 +255,7 @@ type SigmoidMF
 	
 	eval::Function
 	mean_at::Function
+	area_under::Function
 	
 	function SigmoidMF(a, c, limit)
 	
@@ -237,6 +277,23 @@ type SigmoidMF
 			p2 = this.limit
 			(p1 + p2) / 2
 			
+		end
+		
+		this.area_under = function area_under(firing_strength)
+		
+			p1 = -log((1 / firing_strength) - 1) / this.a + this.c
+			p2 = this.limit
+			
+			if p2 < p1
+				
+				return (p1 - p2) * firing_strength + quadgk(this.eval, p1, Inf)
+				
+			elseif p2 > p1
+			
+				return (p2 - p1) * firing_strength + quadgk(this.eval, -Inf, p1)
+			
+			end
+		
 		end
 		
 		this
