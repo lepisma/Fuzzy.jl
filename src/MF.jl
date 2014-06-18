@@ -110,10 +110,18 @@ type GaussianMF
 		
 		this.area_under = function area_under(firing_strength)
 		
-			p1 = this.center + this.sigma * sqrt(-2 * log(firing_strength))
-			p2 = 2 * this.center - p1
+			if firing_strength == 0
+				
+				return 0
 			
-			quadgk(this.eval, -Inf, p1)[1] + (p2 - p1) * firing_strength + quadgk(this.eval, p2, Inf)[1]
+			else
+				
+				p1 = this.center + this.sigma * sqrt(-2 * log(firing_strength))
+				p2 = 2 * this.center - p1
+			
+				return quadgk(this.eval, -Inf, p2)[1] + (p1 - p2) * firing_strength + quadgk(this.eval, p1, Inf)[1]
+			
+			end
 		
 		end
 		
@@ -164,10 +172,18 @@ type BellMF
 		
 		this.area_under = function area_under(firing_strength)
 		
-			p1 = this.c + this.a * (((1 / firing_strength) - 1) ^ (-2 * this.b))
-			p2 = 2 * this.c - p1
+			if firing_strength == 0
+				
+				return 0
 			
-			quadgk(this.eval, -Inf, p1)[1] + (p2 - p1) * firing_strength + quadgk(this.eval, p2, Inf)[1]
+			else
+		
+				p1 = this.c + this.a * (((1 / firing_strength) - 1) ^ (1 / (2 * this.b)))
+				p2 = 2 * this.c - p1
+			
+				return quadgk(this.eval, -Inf, p2)[1] + (p1 - p2) * firing_strength + quadgk(this.eval, p1, Inf)[1]
+			
+			end
 		
 		end
 		
@@ -279,7 +295,19 @@ type SigmoidMF
 			
 			this.mean_at = function mean_at(firing_strength)
 				
-				p_firing_strength = firing_strength == 1 ? 0.999 : firing_strength
+				if firing_strength == 1
+				
+					p_firing_strength = 0.999
+				
+				elseif firing_strength == 0
+				
+					p_firing_strength = 0.001
+				
+				else
+					
+					p_firing_strength = firing_strength
+				
+				end
 					
 				p1 = -log((1 / p_firing_strength) - 1) / this.a + this.c
 				p2 = this.limit
@@ -289,7 +317,19 @@ type SigmoidMF
 		
 			this.area_under = function area_under(firing_strength)
 			
-				p_firing_strength = firing_strength == 1 ? 0.999 : firing_strength
+				if firing_strength == 1
+				
+					p_firing_strength = 0.999
+				
+				elseif firing_strength == 0
+				
+					p_firing_strength = 0.001
+				
+				else
+					
+					p_firing_strength = firing_strength
+				
+				end
 				
 				p1 = -log((1 / p_firing_strength) - 1) / this.a + this.c
 				p2 = this.limit
@@ -313,7 +353,6 @@ type SigmoidMF
 			error("invalid parameters")
 			
 		end
-		
 		
 	end
 	
