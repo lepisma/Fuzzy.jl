@@ -43,6 +43,58 @@ function eval_fis(fis::FISMamdani,
 
 end
 
+function eval_fis(fis::FISSugeno,
+					input_values::Vector{Float64};
+					firing_method = "MIN")
+	# Evaluates the FIS
+	#
+	# Parameters
+	# ----------
+	# `fis` is the inference system to evaluate
+	# `input_values` is a Vector of inputs
+	# `firing_method` is the method for finding firing strength
+	# 		Currently supports "MIN" (minimum) and "PROD" (product)
+
+	firing_strengths = Float64[]
+	
+	for rule in fis.rules
+		
+		tmp_strengths = Float64[]
+		
+		for i in length(rule.input_mf_names)
+			
+			push!(tmp_strengths, fis.input_mfs_dicts[i][rule.input_mf_names[i]].eval(input_values[i]))
+		
+		end
+		
+		if firing_method == "MIN"
+			
+			push!(firing_strengths, minimum(tmp_strengths))
+		
+		elseif firing_method == "PROD"
+			
+			push!(firing_strengths, prod(tmp_strengths))
+		
+		end
+	
+	end
+	
+	push!(input_values, 1)
+	
+	n_firing_strength = firing_strength / sum(firing_strength)
+	
+	out = 0
+	
+	for i = 1:length(fis.rules)
+	
+		out += n_firing_strength[i] * (fis.rules[i].output_mf' * input_values)
+		
+	end
+	
+	out
+
+end
+
 function defuzz(firing_strengths::Vector{Float64},
 				rules::Vector{Rule},
 				output_mfs_dict::Dict{Any, Any};
