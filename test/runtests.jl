@@ -9,7 +9,8 @@ tests = ["triangular_mf.jl",
 		"trapezoidal_mf.jl",
 		"bell_mf.jl",
 		"sigmoid_mf.jl",
-		"simple_fis.jl"]
+		"fis_mamdani.jl",
+		"fis_sugeno.jl"]
 				
 println("Running test:")
 

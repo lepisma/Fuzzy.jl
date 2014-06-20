@@ -21,7 +21,7 @@ function eval_fis(fis::FISMamdani,
 		
 		tmp_strengths = Float64[]
 		
-		for i in length(rule.input_mf_names)
+		for i in 1:length(rule.input_mf_names)
 			
 			push!(tmp_strengths, fis.input_mfs_dicts[i][rule.input_mf_names[i]].eval(input_values[i]))
 		
@@ -61,10 +61,10 @@ function eval_fis(fis::FISSugeno,
 		
 		tmp_strengths = Float64[]
 		
-		for i in length(rule.input_mf_names)
+		for i in 1:length(rule.input_mf_names)
 			
 			push!(tmp_strengths, fis.input_mfs_dicts[i][rule.input_mf_names[i]].eval(input_values[i]))
-		
+			
 		end
 		
 		if firing_method == "MIN"
@@ -81,17 +81,19 @@ function eval_fis(fis::FISSugeno,
 	
 	push!(input_values, 1)
 	
-	n_firing_strength = firing_strength / sum(firing_strength)
+	n_firing_strengths = firing_strengths / sum(firing_strengths)
 	
-	out = 0
+	out = 0.0
 	
 	for i = 1:length(fis.rules)
 	
-		out += n_firing_strength[i] * (fis.rules[i].output_mf' * input_values)
+		out += n_firing_strengths[i] * (fis.rules[i].output_mf' * input_values)[1]
 		
 	end
 	
-	out
+	pop!(input_values)
+
+	return out
 
 end
 

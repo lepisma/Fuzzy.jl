@@ -2,14 +2,18 @@ ipa = Dict()
 ipb = Dict()
 ops = Dict()
 
+# Input membership functions
 ipa["small"] = TriangularMF(1, 2, 3)
 ipb["small"] = TriangularMF(1, 2, 3)
-
-ops["small"] = TriangularMF(1, 2, 3)
 ips = [ipa, ipb]
 
+# Output membership functions
+ops["small"] = TriangularMF(1, 2, 3)
+
+# Input values
 ival = [1.2, 2.3]
 
+# Simple rule
 rule = Rule(["small", "small"], "small")
 rules = [rule]
 
