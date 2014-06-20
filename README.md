@@ -81,7 +81,7 @@ julia> eval_fis(fis, in_vals)
     -	Sigmoid
 -	Defuzzification
 	-	Mean of Maximum
-    -	*Weighted Average (coming soon)*
+    -	Weighted Average (default)
     -	*Centroid (coming soon)*
 
 ###License

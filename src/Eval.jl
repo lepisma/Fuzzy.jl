@@ -4,7 +4,7 @@
 function eval_fis(fis::FISMamdani,
 					input_values::Vector{Float64};
 					firing_method = "MIN",
-					defuzz_method = "MOM")
+					defuzz_method = "WTAV")
 	# Evaluates the FIS
 	#
 	# Parameters
@@ -100,7 +100,7 @@ end
 function defuzz(firing_strengths::Vector{Float64},
 				rules::Vector{Rule},
 				output_mfs_dict::Dict{Any, Any};
-				defuzz_method = "MOM")
+				defuzz_method = "WTAV")
 	# Defuzzifies the output using the given firing strengths
 	#
 	# Parameters
@@ -110,13 +110,26 @@ function defuzz(firing_strengths::Vector{Float64},
 	# `rules` is a Vector of Rule
 	# `output_mfs_dict` is a Dict of output membership functions
 	# `defuzz_method` is the method for defuzzification
-	# 		Currently supports "MOM" (Mean of Maximum)
+	# 		"MOM" - Mean of Maximum
+	# 		"WTAV" - Weighted Average
 	
 	if defuzz_method == "MOM"
 		
 		max_firing_index = indmax(firing_strengths)
 		max_fired_mf_name = rules[max_firing_index].output_mf
 		output_mfs_dict[max_fired_mf_name].mean_at(maximum(firing_strengths))
+		
+	elseif defuzz_method == "WTAV"
+	
+		mean_vec = Float64[]
+		
+		for i in 1:length(rules)
+			
+			push!(mean_vec, output_mfs_dict[rules[i].output_mf].mean_at(firing_strengths[i]))
+			
+		end
+		
+		(mean_vec' * firing_strengths)[1] / sum(firing_strengths)
 		
 	end
 
