@@ -2,6 +2,8 @@
 
 ![Travis-CI Build Status](https://travis-ci.org/lepisma/Fuzzy.jl.svg)
 
+> **This repo is unmaintained. Follow [phelipe/Fuzzy.jl](https://github.com/phelipe/Fuzzy.jl) for an active version with more features and newer Julia version support.**
+
 Mamdani and Sugeno type Fuzzy Inference System in julia
 
 ### Install
